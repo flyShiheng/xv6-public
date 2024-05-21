@@ -145,17 +145,6 @@ vectors.S: vectors.pl
 
 ULIB = ulib.o usys.o printf.o umalloc.o
 
-_%: %.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
-	$(OBJDUMP) -S $@ > $*.asm
-	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
-
-_forktest: forktest.o $(ULIB)
-	# forktest has less library code linked in - needs to be small
-	# in order to be able to max out the proc table.
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
-	$(OBJDUMP) -S _forktest > forktest.asm
-
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
@@ -165,25 +154,8 @@ mkfs: mkfs.c fs.h
 # http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
 
-UPROGS=\
-	_cat\
-	_echo\
-	_forktest\
-	_grep\
-	_init\
-	_kill\
-	_ln\
-	_ls\
-	_mkdir\
-	_rm\
-	_sh\
-	_stressfs\
-	_usertests\
-	_wc\
-	_zombie\
-
-fs.img: mkfs README $(UPROGS)
-	./mkfs fs.img README $(UPROGS)
+fs.img: mkfs README ${ULIB}
+	make -C user CC=${CC} CFLAGS="${CFLAGS}" LD=$(LD) LDFLAGS="$(LDFLAGS)" OBJDUMP=${OBJDUMP}
 
 -include *.d
 
@@ -191,8 +163,8 @@ clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
 	initcode initcode.out kernel xv6.img fs.img kernelmemfs \
-	xv6memfs.img mkfs .gdbinit \
-	$(UPROGS)
+	xv6memfs.img mkfs .gdbinit
+	make -C user clean
 
 # make a printout
 FILES = $(shell grep -v '^\#' runoff.list)
