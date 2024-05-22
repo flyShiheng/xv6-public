@@ -16,6 +16,7 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
+	_sleep\
 
 ULIB = ../ulib.o ../usys.o ../printf.o ../umalloc.o
 
