@@ -100,12 +100,8 @@ xv6memfs.img: bootblock kernelmemfs
 	dd if=bootblock of=xv6memfs.img conv=notrunc
 	dd if=kernelmemfs of=xv6memfs.img seek=1 conv=notrunc
 
-bootblock: bootasm.S bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
-	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
-	$(OBJDUMP) -S bootblock.o > bootblock.asm
-	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
+bootblock:
+	make -C boot CC=${CC} CFLAGS="${CFLAGS}" LD=$(LD) LDFLAGS="$(LDFLAGS)" OBJCOPY=${OBJCOPY}
 	./sign.pl bootblock
 
 entryother: entryother.S
@@ -165,6 +161,7 @@ clean:
 	initcode initcode.out kernel xv6.img fs.img kernelmemfs \
 	xv6memfs.img mkfs .gdbinit
 	make -C user clean
+	make -C boot clean
 
 # make a printout
 FILES = $(shell grep -v '^\#' runoff.list)
