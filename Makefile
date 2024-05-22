@@ -74,7 +74,7 @@ xv6memfs.img: bootblock kernelmemfs
 
 bootblock:
 	make -C boot CC=${CC} CFLAGS="${CFLAGS}" LD=$(LD) LDFLAGS="$(LDFLAGS)" OBJCOPY=${OBJCOPY} OBJDUMP=${OBJDUMP}
-	./sign.pl bootblock
+	./script/sign.pl bootblock
 
 kernel:
 	make -C kernelx CC=${CC} CFLAGS="${CFLAGS}" LD=$(LD) LDFLAGS="$(LDFLAGS)" OBJCOPY=${OBJCOPY} OBJDUMP=${OBJDUMP}
@@ -142,7 +142,7 @@ QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 ifndef CPUS
 CPUS := 2
 endif
-QEMUOPTS = -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp $(CPUS) -m 512 -nographic $(QEMUEXTRA)
+QEMUOPTS = -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp $(CPUS) -m 512 $(QEMUEXTRA)
 
 qemu: fs.img xv6.img
 	$(QEMU) -serial mon:stdio $(QEMUOPTS)
