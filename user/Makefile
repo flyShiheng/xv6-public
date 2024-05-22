@@ -25,7 +25,7 @@ all: $(UPROGS) _forktest
 	mv fs.img ..
 
 %.o: %.c
-	$(CC) $(CFLAGS) -nostdinc -I. -c $^ -I..
+	$(CC) $(CFLAGS) -nostdinc -I. -c $^ -I../include
 
 _%: %.o
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^ $(ULIB)
@@ -37,4 +37,4 @@ _forktest: forktest.o
 	$(OBJDUMP) -S _forktest > forktest.asm
 
 clean:
-	rm -f *.o *.d *.asm _*
+	rm -f *.o *.d *.asm _* *.sym
