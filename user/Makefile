@@ -18,6 +18,7 @@ UPROGS=\
 	_zombie\
 	_sleep\
 	_pingpong\
+	_primes\
 
 ULIB = ../ulib.o ../usys.o ../printf.o ../umalloc.o
 
