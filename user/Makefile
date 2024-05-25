@@ -20,6 +20,7 @@ UPROGS=\
 	_pingpong\
 	_primes\
 	_find\
+	_xargs\
 
 ULIB = ../ulib.o ../usys.o ../printf.o ../umalloc.o
 
