@@ -19,6 +19,7 @@ UPROGS=\
 	_sleep\
 	_pingpong\
 	_primes\
+	_find\
 
 ULIB = ../ulib.o ../usys.o ../printf.o ../umalloc.o
 
