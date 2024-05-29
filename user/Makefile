@@ -21,6 +21,7 @@ UPROGS=\
 	_primes\
 	_find\
 	_xargs\
+	_trace\
 
 ULIB = ../ulib.o ../usys.o ../printf.o ../umalloc.o
 
