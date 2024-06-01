@@ -111,6 +111,7 @@ found:
   p->context = (struct context*)sp;
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
+  p->sys_trace = 0;
 
   return p;
 }
@@ -207,6 +208,7 @@ fork(void)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
   np->cwd = idup(curproc->cwd);
+  np->sys_trace = curproc->sys_trace;
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
