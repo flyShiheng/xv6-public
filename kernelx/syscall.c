@@ -130,6 +130,31 @@ static int (*syscalls[])(void) = {
 [SYS_trace]   sys_trace,
 };
 
+static char *syscall_names[] = {
+    "sys_fork",
+    "sys_exit",
+    "sys_wait",
+    "sys_pipe",
+    "sys_read",
+    "sys_kill",
+    "sys_exec",
+    "sys_fstat",
+    "sys_chdir",
+    "sys_dup",
+    "sys_getpid",
+    "sys_sbrk",
+    "sys_sleep",
+    "sys_uptime",
+    "sys_open",
+    "sys_write",
+    "sys_mknod",
+    "sys_unlink",
+    "sys_link",
+    "sys_mkdir",
+    "sys_close",
+    "sys_trace",
+};
+
 void
 syscall(void)
 {
@@ -139,6 +164,9 @@ syscall(void)
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
+    if ((curproc->sys_trace >> num) & 1) {
+      cprintf("syscall %s -> %d\n", syscall_names[num-1], curproc->tf->eax);
+    }
   } else {
     cprintf("%d %s: unknown sys call %d\n",
             curproc->pid, curproc->name, num);
