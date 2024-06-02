@@ -22,6 +22,7 @@ UPROGS=\
 	_find\
 	_xargs\
 	_trace\
+	_sysinfotest\
 
 ULIB = ../ulib.o ../usys.o ../printf.o ../umalloc.o
 

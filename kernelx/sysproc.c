@@ -98,3 +98,21 @@ int sys_trace(void)
   myproc()->sys_trace = mask;
   return 0;
 }
+
+struct sysinfo {
+  uint mem_size;
+  uint process_num;
+};
+
+int sys_sysinfo()
+{
+  int p;
+  struct sysinfo info;
+  if(argint(0, &p) < 0)
+    return -1;
+  info.mem_size = freemem();
+  info.process_num = proce_count();
+  if (copyout(myproc()->pgdir, p, &info, sizeof(info)) < 0)
+    return -1;
+  return 0;
+}
